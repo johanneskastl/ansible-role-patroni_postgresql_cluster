@@ -51,10 +51,10 @@
   notify:
     - 'restart patroni'
 
-- name: "Create {{ systemd_unit_path }}/patroni.service"
+- name: "Create {{ systemd_unit_path }}/{{ systemd_unit_name }}"
   ansible.builtin.template:
     src: 'patroni.service.j2'
-    dest: "{{ systemd_unit_path }}/patroni.service"
+    dest: "{{ systemd_unit_path }}/{{ systemd_unit_name }}"
     owner: 'root'
     group: 'root'
     mode: '0644'
@@ -64,8 +64,8 @@
 - name: 'Flush handlers to trigger the systemctl daemon-reload, if needed'
   ansible.builtin.meta: flush_handlers
 
-- name: 'Start and enable patroni'
+- name: 'Start and enable the patroni service'
   ansible.builtin.service:
-    name: 'patroni.service'
+    name: "{{ systemd_unit_name }}"
     state: 'started'
     enabled: 'true'
