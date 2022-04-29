@@ -2,6 +2,11 @@
 # patroni_postgresql_cluster/defaults/main.yml
 
 #
+# system settings
+#
+systemd_unit_path: '/etc/systemd/system'
+
+#
 # PostgreSQL
 #
 postgres_system_user: 'postgres'
