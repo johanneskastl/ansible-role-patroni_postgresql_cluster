@@ -1,5 +1,8 @@
 ---
 # patroni_postgresql_cluster/defaults/main.yml
 
+#
+# PostgreSQL
+#
 postgres_system_user: 'postgres'
 postgres_version: '14'
