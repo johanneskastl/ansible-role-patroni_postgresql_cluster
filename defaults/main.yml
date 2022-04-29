@@ -5,6 +5,7 @@
 # system settings
 #
 systemd_unit_path: '/etc/systemd/system'
+systemd_unit_name: 'patroni.service'
 
 #
 # PostgreSQL
