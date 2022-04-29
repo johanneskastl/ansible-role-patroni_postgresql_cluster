@@ -1,0 +1,11 @@
+---
+# patroni_postgresql_cluster/handlers/main.yml
+
+- name: 'Trigger systemctl daemon-reload'
+  ansible.builtin.systemd:
+    daemon_reload: 'yes'
+
+- name: 'restart patroni'
+  ansible.builtin.service:
+    name: 'patroni.service'
+    state: 'restarted'
