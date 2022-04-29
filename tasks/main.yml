@@ -51,10 +51,10 @@
   notify:
     - 'restart patroni'
 
-- name: 'Create /etc/systemd/system/patroni.service'
+- name: "Create {{ systemd_unit_path }}/patroni.service"
   ansible.builtin.template:
     src: 'patroni.service.j2'
-    dest: '/etc/systemd/system/patroni.service'
+    dest: "{{ systemd_unit_path }}/patroni.service"
     owner: 'root'
     group: 'root'
     mode: '0644'
