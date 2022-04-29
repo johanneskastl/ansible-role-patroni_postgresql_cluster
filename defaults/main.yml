@@ -16,7 +16,31 @@ postgres_version: '14'
 #
 # Patroni
 #
+
 # working directory for patroni
 # Attention: we will create another directory named patroni
 # inside the working directory, which patroni can rename in case of errors
 patroni_working_directory: '/opt/patroni'
+
+## general settings
+patroni_scope: 'postgres'
+patroni_namespace: '/db/'
+patroni_restapi_port: '8008'
+
+## bootstrap settings
+patroni_bootstrap_dcs_ttl: '30'
+patroni_bootstrap_dcs_loop_wait: '10'
+patroni_bootstrap_dcs_retry_timeout: '10'
+patroni_bootstrap_dcs_maximum_lag_on_failover: '1048576'
+patroni_bootstrap_dcs_postgresql_use_pg_rewind: 'true'
+patroni_bootstrap_initdb:
+  - 'encoding: UTF8'
+  - 'data-checksums'
+patroni_bootstrap_user_default_options:
+  - 'createrole'
+  - 'createdb'
+
+## postgresql settings
+patroni_postgresql_pgpass: '/tmp/pgpass'
+patroni_postgresql_parameters:
+  unix_socket_directories: '.'
