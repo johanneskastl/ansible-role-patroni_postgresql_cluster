@@ -1,0 +1,7 @@
+---
+# /vars/vars_Suse.yml
+
+# packages to be installed
+postgresql_packages:
+  - "postgresql{{ postgres_version }}"
+  - "postgresql{{ postgres_version }}-server"
