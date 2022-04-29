@@ -11,3 +11,11 @@ systemd_unit_path: '/etc/systemd/system'
 #
 postgres_system_user: 'postgres'
 postgres_version: '14'
+
+#
+# Patroni
+#
+# working directory for patroni
+# Attention: we will create another directory named patroni
+# inside the working directory, which patroni can rename in case of errors
+patroni_working_directory: '/opt/patroni'
