@@ -11,7 +11,10 @@ restapi:
     connect_address: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ patroni_restapi_port }}
 
 etcd:
-    host: {{ hostvars[groups[etcd_servers_group][0]]['ansible_default_ipv4']['address'] }}:2379
+    hosts:
+{% for etcd_host in groups[etcd_servers_group] %}
+      - {{ hostvars[etcd_host]['ansible_default_ipv4']['address'] }}:2379
+{% endfor %}
 
 bootstrap:
     dcs:
