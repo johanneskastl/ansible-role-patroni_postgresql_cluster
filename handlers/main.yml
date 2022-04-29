@@ -7,5 +7,5 @@
 
 - name: 'restart patroni'
   ansible.builtin.service:
-    name: 'patroni.service'
+    name: "{{ systemd_unit_name }}"
     state: 'restarted'
