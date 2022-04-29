@@ -1,0 +1,22 @@
+galaxy_info:
+  role_name: 'patroni_postgresql_cluster'
+  namespace: 'johanneskastl'
+  author: 'Johannes Kastl'
+  description: 'Install and configure Patroni to setup a highly-available PostgreSQL cluster'
+  company: 'B1 Systems GmbH'
+
+  license: 'BSD-3-Clause'
+
+  min_ansible_version: 2.4
+
+  platforms:
+    - name: opensuse
+      versions:
+        - 15
+    - name: SLES
+      versions:
+        - 15
+
+  galaxy_tags: []
+
+dependencies: []
