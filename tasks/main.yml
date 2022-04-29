@@ -23,8 +23,7 @@
 
 - name: 'Install packages for postgresql'
   ansible.builtin.package:
-      - "postgresql{{ postgres_version }}"
-      - "postgresql{{ postgres_version }}-server"
+    name: "{{ postgresql_packages }}"
     state: 'present'
   when:
     - 'ansible_os_family == "Suse"'
