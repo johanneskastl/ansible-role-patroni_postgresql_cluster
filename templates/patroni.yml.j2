@@ -1,0 +1,86 @@
+#
+# {{ ansible_managed }}
+#
+scope: {{ patroni_scope }}
+{# remove leading and trailing slashes, if the user set this to '/db/' or similar #}
+namespace: /{{ patroni_namespace | regex_replace('^/', '') | regex_replace('/$', '') }}/
+name: {{ hostvars[inventory_hostname]['ansible_hostname'] }}
+
+restapi:
+    listen: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ patroni_restapi_port }}
+    connect_address: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:{{ patroni_restapi_port }}
+
+etcd:
+    host: {{ hostvars[groups['etcd_nodes'][0]]['ansible_default_ipv4']['address'] }}:2379
+
+bootstrap:
+    dcs:
+        ttl: {{ patroni_bootstrap_dcs_ttl }}
+        loop_wait: {{ patroni_bootstrap_dcs_loop_wait }}
+        retry_timeout: {{ patroni_bootstrap_dcs_retry_timeout }}
+        maximum_lag_on_failover: {{ patroni_bootstrap_dcs_maximum_lag_on_failover }}
+        postgresql:
+{% if patroni_bootstrap_dcs_postgresql_use_pg_rewind | bool %}
+            use_pg_rewind: true
+{% else %}
+            use_pg_rewind: false
+{% endif %}
+
+    initdb:
+{% for setting in patroni_bootstrap_initdb %}
+    - {{ setting }}
+{% endfor %}
+
+    pg_hba:
+    - host replication replicator 127.0.0.1/32 md5
+{% for patroni_host in groups['patroni_nodes'] %}
+    - host replication replicator {{ hostvars[patroni_host]['ansible_default_ipv4']['address'] }}/0 md5
+{% endfor %}
+    - host all all 0.0.0.0/0 md5
+
+{% if patroni_bootstrap_users is defined %}
+    users:
+{% for user in patroni_bootstrap_users %}
+        {{ user['name'] }}:
+            password: {{ user['password'] }}
+            options:
+{% if user['options'] is defined %}
+{% for option in user['options'] %}
+                - {{ option }}
+{% endfor %}
+{% else%}
+{% for option in patroni_bootstrap_user_default_options %}
+                - {{ option }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+postgresql:
+    listen: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}
+    connect_address: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}
+    data_dir: {{ patroni_working_directory }}/patroni
+    pgpass: {{ patroni_postgresql_pgpass }}
+{% if patroni_postgresql_authentication is defined %}
+    authentication:
+{% for authentication in patroni_postgresql_authentication %}
+        {{ authentication['name'] }}:
+            username: {{ authentication['username'] }}
+            password: {{ authentication['password'] }}
+{% endfor%}
+{% endif %}
+    parameters:
+{% for key,value in patroni_postgresql_parameters.items() %}
+        {{ key }}: '{{ value }}'
+{% endfor%}
+{% if patroni_tags is defined %}
+
+tags:
+{% for tag in patroni_tags %}
+{% if tag | bool %}
+    {{ tag }}: true
+{% else %}
+    {{ tag }}: false
+{% endif %}
+{% endfor %}
+{% endif %}
