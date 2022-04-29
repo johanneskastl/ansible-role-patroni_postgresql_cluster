@@ -21,16 +21,20 @@
     - 'ansible_os_family == "Suse"'
     - 'ansible_distribution_major_version == "15"'
 
-- name: 'Install packages for patroni and postgresql'
+- name: 'Install packages for postgresql'
   ansible.builtin.package:
-    name:
-      - 'patroni'
       - "postgresql{{ postgres_version }}"
       - "postgresql{{ postgres_version }}-server"
     state: 'present'
   when:
     - 'ansible_os_family == "Suse"'
     - 'ansible_distribution_major_version == "15"'
+
+- name: 'Install patroni'
+  ansible.builtin.package:
+    name:
+      - 'patroni'
+    state: 'present'
 
 - name: "Create directory {{ patroni_working_directory }}"
   ansible.builtin.file:
