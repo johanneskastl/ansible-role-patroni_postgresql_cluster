@@ -23,7 +23,7 @@ patroni_working_directory: '/opt/patroni'
 
 ## general settings
 patroni_scope: 'postgres'
-patroni_namespace: '/db/'
+patroni_namespace: '/service/'
 patroni_restapi_port: '8008'
 
 ## bootstrap settings
