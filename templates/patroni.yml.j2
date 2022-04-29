@@ -35,7 +35,7 @@ bootstrap:
 
     pg_hba:
     - host replication replicator 127.0.0.1/32 md5
-{% for patroni_host in groups['patroni_nodes'] %}
+{% for patroni_host in groups[patroni_servers_group] %}
     - host replication replicator {{ hostvars[patroni_host]['ansible_default_ipv4']['address'] }}/0 md5
 {% endfor %}
     - host all all 0.0.0.0/0 md5
