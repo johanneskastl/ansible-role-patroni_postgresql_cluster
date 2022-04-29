@@ -1,6 +1,13 @@
 ---
 # patroni_postgresql_cluster/tasks/main.yml
 
+- name: "Load variables"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "vars_{{ ansible_distribution | replace(' ', '_' ) }}{{ ansible_distribution_major_version }}.yml"
+    - "vars_{{ ansible_distribution | replace(' ', '_' ) }}.yml"
+    - "vars_{{ ansible_os_family }}.yml"
+
 - name: "Add the zypper repository for Patroni"
   ansible.builtin.zypper_repository:
     repo: "https://download.opensuse.org/repositories/home:/ojkastl_buildservice:/Patroni/{{ ansible_distribution_version }}"
