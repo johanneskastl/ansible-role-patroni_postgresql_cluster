@@ -1,0 +1,71 @@
+---
+# patroni_postgresql_cluster/tasks/main.yml
+
+- name: "Add the zypper repository for Patroni"
+  ansible.builtin.zypper_repository:
+    repo: "https://download.opensuse.org/repositories/home:/ojkastl_buildservice:/Patroni/{{ ansible_distribution_version }}"
+    name: 'home_ojkastl_buildservice_patroni'
+    enabled: 'yes'
+    autorefresh: 'yes'
+    state: 'present'
+    runrefresh: 'yes'
+    auto_import_keys: 'yes'
+  when:
+    - 'ansible_os_family == "Suse"'
+    - 'ansible_distribution_major_version == "15"'
+
+- name: 'Install packages for patroni and postgresql'
+  ansible.builtin.package:
+    name:
+      - 'patroni'
+      - "postgresql{{ postgres_version }}"
+      - "postgresql{{ postgres_version }}-server"
+    state: 'present'
+  when:
+    - 'ansible_os_family == "Suse"'
+    - 'ansible_distribution_major_version == "15"'
+
+- name: 'Create directory /opt/patroni/'
+  ansible.builtin.file:
+    path: '/opt/patroni/'
+    state: 'directory'
+    owner: "{{ postgres_system_user }}"
+    group: "{{ postgres_system_user }}"
+    mode: '0700'
+
+- name: 'Create directory /opt/patroni/patroni'
+  ansible.builtin.file:
+    path: '/opt/patroni/patroni'
+    state: 'directory'
+    owner: "{{ postgres_system_user }}"
+    group: "{{ postgres_system_user }}"
+    mode: '0700'
+
+- name: 'Create /etc/patroni.yml'
+  ansible.builtin.template:
+    src: 'patroni.yml.j2'
+    dest: '/etc/patroni.yml'
+    owner: "{{ postgres_system_user }}"
+    group: "{{ postgres_system_user }}"
+    mode: '0600'
+  notify:
+    - 'restart patroni'
+
+- name: 'Create /etc/systemd/system/patroni.service'
+  ansible.builtin.template:
+    src: 'patroni.service.j2'
+    dest: '/etc/systemd/system/patroni.service'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  notify:
+    - 'Trigger systemctl daemon-reload'
+
+- name: 'Flush handlers to trigger the systemctl daemon-reload, if needed'
+  ansible.builtin.meta: flush_handlers
+
+- name: 'Start and enable patroni'
+  ansible.builtin.service:
+    name: 'patroni.service'
+    state: 'started'
+    enabled: 'true'
