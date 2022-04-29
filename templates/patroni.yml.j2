@@ -20,11 +20,13 @@ bootstrap:
         retry_timeout: {{ patroni_bootstrap_dcs_retry_timeout }}
         maximum_lag_on_failover: {{ patroni_bootstrap_dcs_maximum_lag_on_failover }}
         postgresql:
-{% if patroni_bootstrap_dcs_postgresql_use_pg_rewind | bool %}
-            use_pg_rewind: true
+{% for key,value in patroni_bootstrap_dcs_postgresql_parameters.items() %}
+{% if value | bool %}
+            {{ key }}: true
 {% else %}
-            use_pg_rewind: false
+            {{ key }}: false
 {% endif %}
+{% endfor %}
 
     initdb:
 {% for setting in patroni_bootstrap_initdb %}

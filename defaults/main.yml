@@ -32,7 +32,8 @@ patroni_bootstrap_dcs_ttl: '30'
 patroni_bootstrap_dcs_loop_wait: '10'
 patroni_bootstrap_dcs_retry_timeout: '10'
 patroni_bootstrap_dcs_maximum_lag_on_failover: '1048576'
-patroni_bootstrap_dcs_postgresql_use_pg_rewind: 'true'
+patroni_bootstrap_dcs_postgresql_parameters:
+  use_pg_rewind: 'true'
 patroni_bootstrap_initdb:
   - 'encoding: UTF8'
   - 'data-checksums'
