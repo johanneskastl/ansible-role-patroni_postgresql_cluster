@@ -1,0 +1,4 @@
+---
+# patroni_postgresql_cluster/defaults/main.yml
+
+postgres_version: '14'
