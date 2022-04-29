@@ -5,3 +5,6 @@
 postgresql_packages:
   - "postgresql{{ postgres_version }}"
   - "postgresql{{ postgres_version }}-server"
+
+# postgres system user
+postgres_system_user: 'postgres'

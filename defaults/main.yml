@@ -10,7 +10,6 @@ systemd_unit_name: 'patroni.service'
 #
 # PostgreSQL
 #
-postgres_system_user: 'postgres'
 postgres_version: '14'
 
 #
