@@ -25,17 +25,17 @@
     - 'ansible_os_family == "Suse"'
     - 'ansible_distribution_major_version == "15"'
 
-- name: 'Create directory /opt/patroni/'
+- name: "Create directory {{ patroni_working_directory }}"
   ansible.builtin.file:
-    path: '/opt/patroni/'
+    path: "{{ patroni_working_directory }}"
     state: 'directory'
     owner: "{{ postgres_system_user }}"
     group: "{{ postgres_system_user }}"
     mode: '0700'
 
-- name: 'Create directory /opt/patroni/patroni'
+- name: "Create directory {{ patroni_working_directory }}/patroni"
   ansible.builtin.file:
-    path: '/opt/patroni/patroni'
+    path: "{{ patroni_working_directory }}/patroni"
     state: 'directory'
     owner: "{{ postgres_system_user }}"
     group: "{{ postgres_system_user }}"
