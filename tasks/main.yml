@@ -43,7 +43,7 @@
     group: "{{ postgres_system_user }}"
     mode: '0700'
 
-- name: "Create directory {{ patroni_working_directory }}/patroni"
+- name: "Create directory patroni inside of {{ patroni_working_directory }}"
   ansible.builtin.file:
     path: "{{ patroni_working_directory }}/patroni"
     state: 'directory'
