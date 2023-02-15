@@ -61,7 +61,7 @@
   notify:
     - 'Restart patroni'
 
-- name: "Create {{ systemd_unit_path }}/{{ systemd_unit_name }}"
+- name: 'Create systemd service file'
   ansible.builtin.template:
     src: 'patroni.service.j2'
     dest: "{{ systemd_unit_path }}/{{ systemd_unit_name }}"
