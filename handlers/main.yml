@@ -5,7 +5,7 @@
   ansible.builtin.systemd:
     daemon_reload: 'yes'
 
-- name: 'restart patroni'
+- name: 'Restart patroni'
   ansible.builtin.service:
     name: "{{ systemd_unit_name }}"
     state: 'restarted'
